@@ -5230,29 +5230,39 @@ int EQ2Emu_lua_GetMostHated(lua_State* state){
 }
 
 int EQ2Emu_lua_ClearHate(lua_State* state){
-	if(!lua_interface)
+	if (!lua_interface) {
 		return 0;
+	}
+
 	Spawn* spawn = lua_interface->GetSpawn(state);
 	Spawn* hated = lua_interface->GetSpawn(state, 2);
-	if(!spawn){
+
+	if (!spawn) {
 		lua_interface->LogError("LUA ClearHate command error: spawn is not valid");
 		return 0;
 	}
-	if(!spawn->IsNPC()){
-		lua_interface->LogError("LUA ClearHate command error: spawn is not NPC");
+
+	if (!spawn->IsEntity()) {
+		lua_interface->LogError("LUA ClearHate command error: spawn is not an entity");
 		return 0;
 	}
-	if(!hated){
-		static_cast<NPC*>(spawn)->Brain()->ClearHate();
+
+	if (!hated) {
+		if (spawn->IsPlayer()) {
+			spawn->GetZone()->ClearHate(static_cast<Player*>(spawn));
+		} else {
+			static_cast<NPC*>(spawn)->Brain()->ClearHate();
+		}
+
 		return 0;
-	}
-	else
-	{
-		if(!hated->IsEntity()){
+	} else {
+		if (!hated->IsEntity()) {
 			lua_interface->LogError("LUA ClearHate command error: second param is not entity");
 			return 0;
 		}
+
 		static_cast<NPC*>(spawn)->Brain()->ClearHate(static_cast<Entity*>(hated));
+
 		return 0;
 	}
 	return 0;
