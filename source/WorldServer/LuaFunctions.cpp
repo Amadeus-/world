@@ -1766,6 +1766,10 @@ int EQ2Emu_lua_AddControlEffect(lua_State* state) {
 		} else if (type == CONTROL_EFFECT_TYPE_FEIGNED) {
 			entity->AddFeignDeathSpell(luaspell);
 			entity->ApplyControlEffects();
+
+			if (!(luaspell->effect_bitmask & EFFECT_FLAG_FEIGNED)) {
+				luaspell->effect_bitmask += EFFECT_FLAG_FEIGNED;
+			}
 		} else if (type == CONTROL_EFFECT_TYPE_WALKUNDERWATER){
 			entity->AddWaterwalkSpell(luaspell);
 

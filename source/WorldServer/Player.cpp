@@ -2478,7 +2478,7 @@ void Player::PrepareIncomingMovementPacket(int32 len,uchar* data,int16 version)
 		SetBoatSpawn(0);
 
 	if (!IsResurrecting() && !GetBoatSpawn()) {
-		if (!IsRooted() && !IsMezzedOrStunned()) {
+		if (!IsRooted() && !IsMezzedOrStunned() && !IsFeigned()) {
 			SetX(x);
 			SetY(y);
 			SetZ(z);
