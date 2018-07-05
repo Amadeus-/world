@@ -1982,6 +1982,23 @@ void Entity::CancelAllStealth(shared_ptr<LuaSpell> exclude_spell) {
 	}
 }
 
+void Entity::RemoveAllFeignEffects() {
+	MutexList<shared_ptr<LuaSpell>>* feign_list = control_effects[CONTROL_EFFECT_TYPE_FEIGNED];
+
+	if (feign_list) {
+		auto itr = feign_list->begin();
+
+		while (itr.Next()) {
+			if (itr.value->caster == this) {
+				GetZone()->GetSpellProcess()->AddSpellCancel(itr.value);
+			} else {
+				GetZone()->RemoveTargetFromSpell(itr.value, this);
+				RemoveSpellEffect(itr.value);
+			}
+		}
+	}
+}
+
 bool Entity::CanAttackTarget(Spawn* target) {
 	if (target == this)
 		return false;

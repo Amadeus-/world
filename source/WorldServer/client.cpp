@@ -929,18 +929,25 @@ bool Client::HandlePacket(EQApplicationPacket *app) {
 				safe_delete(request);
 				break;
 			}
-		case OP_StoodMsg:{
+		case OP_StoodMsg: {
 			LogWrite(OPCODE__DEBUG, 1, "Opcode", "Opcode 0x%X (%i): OP_StoodMsg", opcode, opcode);
-			if(camp_timer)
-			{
-				// JA: clear camping flag
-				if( (player->GetActivityStatus() & ACTIVITY_STATUS_CAMPING) > 0 )
+			if (camp_timer) {
+				if ((player->GetActivityStatus() & ACTIVITY_STATUS_CAMPING) > 0) {
 					player->SetActivityStatus(player->GetActivityStatus() - ACTIVITY_STATUS_CAMPING);
+				}
+
 				safe_delete(camp_timer);
+
 				EQ2Packet* outapp = new EQ2Packet(OP_CampAbortedMsg, 0, 0);
 				QueuePacket(outapp);
 			}
-			player->SetTempVisualState(0);
+
+			if (player->IsFeigned()) {
+				player->RemoveAllFeignEffects();
+			} else {
+				player->SetTempActionState(0);
+			}
+
 			break;
 						 }
 		case OP_StandMsg:{
@@ -954,17 +961,17 @@ bool Client::HandlePacket(EQApplicationPacket *app) {
 				EQ2Packet* outapp = new EQ2Packet(OP_CampAbortedMsg, 0, 0);
 				QueuePacket(outapp);
 			}
-			player->SetTempVisualState(539);
+			player->SetTempActionState(539);
 			break;
 						 } 
 		case OP_SitMsg: {
 			LogWrite(OPCODE__DEBUG, 1, "Opcode", "Opcode 0x%X (%i): OP_SitMsg", opcode, opcode);
-			player->SetTempVisualState(538);
+			player->SetTempActionState(538);
 			break;
 						}
 		case OP_SatMsg: {
 			LogWrite(OPCODE__DEBUG, 1, "Opcode", "Opcode 0x%X (%i): OP_SatMsg", opcode, opcode);
-			player->SetTempVisualState(540);
+			player->SetTempActionState(540);
 			break;
 						}
 		case OP_QuestJournalOpenMsg:

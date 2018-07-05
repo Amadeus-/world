@@ -814,6 +814,7 @@ public:
 	void RemoveEffectsFromLuaSpell(shared_ptr<LuaSpell> spell);
 	virtual void RemoveSkillBonus(int32 spell_id);
 	void CancelAllStealth(shared_ptr<LuaSpell> exclude_spell = nullptr);
+	void RemoveAllFeignEffects();
 	bool CanAttackTarget(Spawn* target);
 	bool IsHostile(Spawn* target);
 	bool IsStealthed();
