@@ -1131,8 +1131,10 @@ void ZoneServer::CheckSpawnRange(shared_ptr<Client> client, Spawn* spawn, bool i
 
 			SetClientRangeDistance(client, spawn->GetID(), distance);
 
-			if (!initial_login && spawn->IsNPC() && !static_cast<NPC*>(spawn)->m_runningBack && distance <= static_cast<NPC*>(spawn)->GetAggroRadius() && !client->GetPlayer()->GetInvulnerable()) {
-				CheckNPCAttacks(static_cast<NPC*>(spawn), client->GetPlayer(), client);
+			if (!initial_login && spawn->IsNPC() && !static_cast<NPC*>(spawn)->m_runningBack && distance <= static_cast<NPC*>(spawn)->GetAggroRadius()) {
+				if (!client->GetPlayer()->GetInvulnerable() && !client->GetPlayer()->IsFeigned()) {
+					CheckNPCAttacks(static_cast<NPC*>(spawn), client->GetPlayer(), client);
+				}
 			}
 		} 
 

@@ -1763,6 +1763,9 @@ int EQ2Emu_lua_AddControlEffect(lua_State* state) {
 			if (!(luaspell->effect_bitmask & EFFECT_FLAG_FORCE_FACE)) {
 				luaspell->effect_bitmask += EFFECT_FLAG_FORCE_FACE;
 			}
+		} else if (type == CONTROL_EFFECT_TYPE_FEIGNED) {
+			entity->AddFeignDeathSpell(luaspell);
+			entity->ApplyControlEffects();
 		} else if (type == CONTROL_EFFECT_TYPE_WALKUNDERWATER){
 			entity->AddWaterwalkSpell(luaspell);
 
@@ -1834,6 +1837,9 @@ int EQ2Emu_lua_RemoveControlEffect(lua_State* state) {
 			static_cast<Entity*>(spawn)->ApplyControlEffects();
 		} else if (type == CONTROL_EFFECT_TYPE_FEAR) {
 			static_cast<Entity*>(spawn)->RemoveFearSpell(luaspell);
+			static_cast<Entity*>(spawn)->ApplyControlEffects();
+		} else if (type == CONTROL_EFFECT_TYPE_FEIGNED) {
+			static_cast<Entity*>(spawn)->RemoveFeignDeathSpell(luaspell);
 			static_cast<Entity*>(spawn)->ApplyControlEffects();
 		} else if (type == CONTROL_EFFECT_TYPE_WALKUNDERWATER) {
 			static_cast<Entity*>(spawn)->RemoveWaterwalkSpell(luaspell);

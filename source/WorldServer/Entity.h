@@ -337,7 +337,8 @@ struct ThreatTransfer {
 #define CONTROL_EFFECT_TYPE_GLIDE 13
 #define CONTROL_EFFECT_TYPE_SAFEFALL 14
 #define CONTROL_EFFECT_TYPE_TAUNT 15
-#define CONTROL_EFFECT_TYPE_FORCE_FACE 16
+#define CONTROL_EFFECT_TYPE_FEIGNED 16
+#define CONTROL_EFFECT_TYPE_FORCE_FACE 17
 
 #define IMMUNITY_TYPE_MEZ 1
 #define IMMUNITY_TYPE_STIFLE 2
@@ -703,7 +704,10 @@ public:
 	bool IsRooted();
 	void AddFearSpell(shared_ptr<LuaSpell> spell);
 	void RemoveFearSpell(shared_ptr<LuaSpell> spell);
+	void AddFeignDeathSpell(shared_ptr<LuaSpell> spell);
+	void RemoveFeignDeathSpell(shared_ptr<LuaSpell> spell);
 	bool IsFeared();
+	bool IsFeigned();
 	bool IsWarded();
 	void AddSnareSpell(shared_ptr<LuaSpell> spell);
 	void RemoveSnareSpell(shared_ptr<LuaSpell> spell);
