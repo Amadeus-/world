@@ -3739,7 +3739,6 @@ int EQ2Emu_lua_SummonPet(lua_State* state) {
 	static_cast<NPC*>(pet)->SetPetType(PET_TYPE_COMBAT);
 	static_cast<NPC*>(pet)->SetPetSpellID(luaspell->spell->GetSpellData()->id);
 	static_cast<NPC*>(pet)->SetPetSpellTier(luaspell->spell->GetSpellData()->tier);
-	static_cast<NPC*>(pet)->SetBrain(new CombatPetBrain(static_cast<NPC*>(pet)));
 
 	static_cast<Entity*>(spawn)->SetCombatPet(static_cast<Entity*>(pet));
 
@@ -3755,6 +3754,8 @@ int EQ2Emu_lua_SummonPet(lua_State* state) {
 	spawn->GetZone()->AddSpawn(pet);
 
 	pet->ScalePet();
+
+	static_cast<NPC*>(pet)->SetBrain(new CombatPetBrain(static_cast<NPC*>(pet)));
 
 	if (spawn->IsPlayer()) {
 		Player* player = static_cast<Player*>(spawn);
@@ -5924,9 +5925,8 @@ int EQ2Emu_lua_SummonDumbFirePet(lua_State* state) {
 	static_cast<NPC*>(pet)->SetPetType(PET_TYPE_DUMBFIRE);
 	static_cast<NPC*>(pet)->SetPetSpellID(luaspell->spell->GetSpellData()->id);
 	static_cast<NPC*>(pet)->SetPetSpellTier(luaspell->spell->GetSpellData()->tier);
-	static_cast<NPC*>(pet)->SetBrain(new DumbFirePetBrain(static_cast<NPC*>(pet), static_cast<Entity*>(target), luaspell->spell->GetSpellDuration() * 100));
-
 	static_cast<NPC*>(pet)->SetOwner(static_cast<Entity*>(spawn));
+
 	static_cast<Entity*>(spawn)->AddDumbfirePet(static_cast<Entity*>(pet));
 
 	if (strlen(pet->GetSubTitle()) > 0) {
@@ -5938,6 +5938,7 @@ int EQ2Emu_lua_SummonDumbFirePet(lua_State* state) {
 	spawn->GetZone()->AddSpawn(pet);
 
 	pet->ScalePet();
+	static_cast<NPC*>(pet)->SetBrain(new DumbFirePetBrain(static_cast<NPC*>(pet), static_cast<Entity*>(target), luaspell->spell->GetSpellDuration() * 100));
 	
 	lua_interface->SetSpawnValue(state, pet);
 
