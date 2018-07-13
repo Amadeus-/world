@@ -6102,15 +6102,19 @@ void ZoneServer::RemoveTargetFromSpell(shared_ptr<LuaSpell> spell, Spawn* target
 }
 
 void ZoneServer::ClearHate(Entity* entity) {
-	Spawn* spawn = 0;
-	map<int32, Spawn*>::iterator itr;
 	MSpawnList.readlock(__FUNCTION__, __LINE__);
-	for (itr = spawn_list.begin(); itr != spawn_list.end(); itr++) {
-		spawn = itr->second;
-		if (spawn && spawn->IsNPC() && ((NPC*)spawn)->Brain())
+	for (auto itr = spawn_list.begin(); itr != spawn_list.end(); itr++) {
+		Spawn* spawn = itr->second;
+
+		if (spawn && spawn->IsNPC() && static_cast<NPC*>(spawn)->Brain()) {
 			static_cast<NPC*>(spawn)->Brain()->ClearHate(entity);
-		else if (spawn && spawn->IsPlayer())
+		} else if (spawn && spawn->IsPlayer()) {
 			static_cast<Player*>(spawn)->RemoveFromEncounterList(entity->GetID());
+
+			if (entity->IsPlayer() && spawn->GetTarget() == entity && static_cast<Player*>(spawn)->IsHostile(entity)) {
+				GetClientBySpawn(spawn)->TargetSpawn(nullptr);
+			}
+		}
 	}
 	MSpawnList.releasereadlock(__FUNCTION__, __LINE__);
 }
