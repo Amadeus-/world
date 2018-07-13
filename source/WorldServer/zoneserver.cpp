@@ -2862,6 +2862,10 @@ void ZoneServer::RemoveClient(shared_ptr<Client> client) {
 
 	if (client) {
 		client->Disconnect();
+
+		if (lua_interface) {
+			lua_interface->RemoveDebugClients(client);
+		}
 		
 		LogWrite(ZONE__DEBUG, 0, "Zone", "Sending login equipment appearance updates...");
 		loginserver.SendImmediateEquipmentUpdatesForChar(client->GetPlayer()->GetCharacterID());

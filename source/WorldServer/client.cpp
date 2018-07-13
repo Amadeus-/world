@@ -195,10 +195,6 @@ Client::~Client() {
 		world.GetGroupManager()->ClearPendingInvite(player);
 	}
 
-	if (lua_interface) {
-		lua_interface->RemoveDebugClients(shared_from_this());
-	}
-
 	//let the stream factory know were done with this stream
 	if (eqs) {
 		eqs->Close();
